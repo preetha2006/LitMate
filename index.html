@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LitMate - Choose Your Mode</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Modern Glass Morphism Styles */
+        :root {
+            --primary: #3498db;
+            --secondary: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --glass: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated Background Elements */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bg-elements div {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            animation: float 15s infinite linear;
+        }
+        
+        .bg-elements div:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .bg-elements div:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 2s;
+        }
+        
+        .bg-elements div:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 10%;
+            left: 70%;
+            animation-delay: 4s;
+        }
+        
+        .bg-elements div:nth-child(4) {
+            width: 90px;
+            height: 90px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 6s;
+        }
+        
+        .bg-elements div:nth-child(5) {
+            width: 60px;
+            height: 60px;
+            top: 40%;
+            left: 50%;
+            animation-delay: 8s;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Glass Morphism Components */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Mode Selection Page */
+        .mode-selection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        
+        .mode-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
+        }
+        
+        .mode-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+        
+        .mode-options {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .mode-btn {
+            padding: 1.5rem 3rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            color: white;
+            z-index: 1;
+        }
+        
+        .mode-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+            z-index: -1;
+        }
+        
+        .mode-btn:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .reader-btn {
+            background: rgba(52, 152, 219, 0.7);
+        }
+        
+        .writer-btn {
+            background: rgba(231, 76, 60, 0.7);
+        }
+        
+        .mode-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Dashboard Styles */
+        .reader-dashboard, .writer-dashboard {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dashboard-title {
+            font-size: 2.2rem;
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.5rem;
+        }
+        
+        .tab-btn {
+            padding: 0.8rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab-btn.active {
+            color: white;
+            border-bottom: 2px solid white;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Book Management */
+        .book-form {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: white;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        /* Book List */
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .book-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            height: 380px;
+        }
+        
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.7));
+            z-index: 1;
+        }
+        
+        .book-cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .book-card:hover .book-cover {
+            transform: scale(1.05);
+        }
+        
+        .book-details {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            z-index: 2;
+        }
+        
+        .book-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .book-author {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .book-rating {
+            color: #f1c40f;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Statistics */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .stat-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .stat-card p {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        /* Quote of the Day */
+        .quote-container {
+            margin-top: 2rem;
+            position: relative;
+        }
+        
+        .quote-container::before {
+            content: '"';
+            position: absolute;
+            top: -30px;
+            left: -20px;
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.1);
+            font-family: serif;
+        }
+        
+        .quote-text {
+            font-size: 1.4rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: white;
+            line-height: 1.6;
+        }
+        
+        .quote-author {
+            text-align: right;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+        
+        /* Prompt Generator */
+        .genre-select, .keywords-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .generated-prompt {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            color: white;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+        
+        /* Writing Analysis */
+        .writing-area {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: white;
+            resize: vertical;
+        }
+        
+        .analysis-results {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            line-height: 1.6;
+        }
+        
+        /* Writing Logs */
+        .writing-logs {
+            margin-top: 2rem;
+        }
+        
+        .log-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .log-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+        
+        .log-date {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .log-content {
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        .log-prompt {
+            font-style: italic;
+            color: var(--primary);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mode-title {
+                font-size: 2.2rem;
+            }
+            
+            .mode-options {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+            
+            .mode-btn {
+                width: 100%;
+            }
+            
+            .book-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .nav-tabs {
+                overflow-x: auto;
+                padding-bottom: 0;
+                flex-wrap: nowrap;
+            }
+        }
+        
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .fab:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Elements -->
+    <div class="bg-elements">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    
+    <div class="container">
+        <!-- Mode Selection Page -->
+        <div class="mode-selection" id="modeSelection">
+            <h1 class="mode-title">Welcome to LitMate</h1>
+            <p class="mode-subtitle">Your personal companion for reading and writing. Choose your mode to begin your creative journey.</p>
+            <div class="mode-options">
+                <button class="mode-btn reader-btn" id="readerBtn">
+                    <i class="fas fa-book-reader"></i> Reader Mode
+                </button>
+                <button class="mode-btn writer-btn" id="writerBtn">
+                    <i class="fas fa-pen-fancy"></i> Writer Mode
+                </button>
+            </div>
+        </div>
+        
+        <!-- Reader Dashboard -->
+        <div class="reader-dashboard" id="readerDashboard">
+            <div class="dashboard-header glass-card">
+                <h1 class="dashboard-title">
+                    <i class="fas fa-book-open"></i> Reader Dashboard
+                </h1>
+                <button class="btn" id="backToModeReader">
+                    <i class="fas fa-exchange-alt"></i> Change Mode
+                </button>
+            </div>
+            
+            <div class="nav-tabs glass-card">
+                <button class="tab-btn active" data-tab="bookManagement">
+                    <i class="fas fa-book"></i> Book Management
+                </button>
+                <button class="tab-btn" data-tab="readLogs">
+                    <i class="fas fa-chart-line"></i> Reading Stats
+                </button>
+                <button class="tab-btn" data-tab="quotes">
+                    <i class="fas fa-quote-right"></i> Quotes
+                </button>
+            </div>
+            
+            <!-- Book Management Tab -->
+            <div class="tab-content active" id="bookManagement">
+                <div class="book-form glass-card">
+                    <h2><i class="fas fa-plus-circle"></i> Add a New Book</h2>
+                    <form id="addBookForm">
+                        <div class="form-group">
+                            <label for="bookCover"><i class="fas fa-image"></i> Book Cover</label>
+                            <input type="file" id="bookCover" class="form-control" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="bookTitle"><i class="fas fa-heading"></i> Title</label>
+                            <input type="text" id="bookTitle" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookAuthor"><i class="fas fa-user-edit"></i> Author</label>
+                            <input type="text" id="bookAuthor" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookDescription"><i class="fas fa-align-left"></i> Description</label>
+                            <textarea id="bookDescription" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookRating"><i class="fas fa-star"></i> Rating (1-5)</label>
+                            <input type="number" id="bookRating" class="form-control" min="1" max="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="favAnnotation"><i class="fas fa-highlighter"></i> Favorite Annotation</label>
+                            <textarea id="favAnnotation" class="form-control" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Book
+                        </button>
+                    </form>
+                </div>
+                
+                <h2 class="glass-card" style="padding: 1rem; margin-bottom: 1.5rem;">
+                    <i class="fas fa-books"></i> Your Library
+                </h2>
+                <div class="book-list" id="bookList">
+                    <!-- Book cards will be added here dynamically -->
+                </div>
+            </div>
+            
+            <!-- Read Logs Tab -->
+            <div class="tab-content" id="readLogs">
+                <h2 class="glass-card" style="padding: 1rem; margin-bottom: 1.5rem;">
+                    <i class="fas fa-chart-pie"></i> Reading Statistics
+                </h2>
+                <div class="stats-container">
+                    <div class="stat-card glass-card">
+                        <h3 class="stat-title">Books Read</h3>
+                        <p id="totalBooks">12</p>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <h3 class="stat-title">Average Rating</h3>
+                        <p id="avgRating">4.2</p>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <h3 class="stat-title">Favorite Genre</h3>
+                        <p id="favGenre">Fantasy</p>
+                    </div>
+                </div>
+                
+                <!-- Additional statistics can be added here -->
+            </div>
+            
+            <!-- Quotes Tab -->
+            <div class="tab-content" id="quotes">
+                <div class="quote-container glass-card">
+                    <h2><i class="fas fa-quote-left"></i> Quote of the Day</h2>
+                    <p class="quote-text" id="dailyQuote">"The more that you read, the more things you will know. The more that you learn, the more places you'll go."</p>
+                    <p class="quote-author">— Dr. Seuss</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Writer Dashboard -->
+        <div class="writer-dashboard" id="writerDashboard">
+            <div class="dashboard-header glass-card">
+                <h1 class="dashboard-title">
+                    <i class="fas fa-pen-nib"></i> Writer Dashboard
+                </h1>
+                <button class="btn" id="backToModeWriter">
+                    <i class="fas fa-exchange-alt"></i> Change Mode
+                </button>
+            </div>
+            
+            <div class="nav-tabs glass-card">
+                <button class="tab-btn active" data-tab="promptGenerator">
+                    <i class="fas fa-lightbulb"></i> Prompt Generator
+                </button>
+                <button class="tab-btn" data-tab="writingAnalysis">
+                    <i class="fas fa-search"></i> Writing Analysis
+                </button>
+                <button class="tab-btn" data-tab="writingLogs">
+                    <i class="fas fa-history"></i> Writing Logs
+                </button>
+            </div>
+            
+            <!-- Prompt Generator Tab -->
+            <div class="tab-content active" id="promptGenerator">
+                <div class="glass-card">
+                    <h2><i class="fas fa-magic"></i> AI Prompt Generator</h2>
+                    <div class="form-group">
+                        <label for="genreSelect"><i class="fas fa-tags"></i> Select Genre</label>
+                        <select id="genreSelect" class="genre-select">
+                            <option value="fantasy">Fantasy</option>
+                            <option value="sci-fi">Science Fiction</option>
+                            <option value="mystery">Mystery</option>
+                            <option value="romance">Romance</option>
+                            <option value="horror">Horror</option>
+                            <option value="historical">Historical Fiction</option>
+                            <option value="contemporary">Contemporary</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="keywordsInput"><i class="fas fa-key"></i> Keywords (comma separated)</label>
+                        <input type="text" id="keywordsInput" class="keywords-input" placeholder="e.g., dragon, castle, betrayal">
+                    </div>
+                    <button class="btn btn-primary" id="generatePromptBtn">
+                        <i class="fas fa-bolt"></i> Generate Prompt
+                    </button>
+                    
+                    <div class="generated-prompt" id="generatedPrompt">
+                        Your generated prompt will appear here...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Writing Analysis Tab -->
+            <div class="tab-content" id="writingAnalysis">
+                <div class="glass-card">
+                    <h2><i class="fas fa-chart-bar"></i> Writing Skill Analysis</h2>
+                    <textarea class="writing-area" id="writingInput" placeholder="Paste or write your story here..."></textarea>
+                    <button class="btn btn-primary" id="analyzeBtn">
+                        <i class="fas fa-search"></i> Analyze My Writing
+                    </button>
+                    
+                    <div class="analysis-results" id="analysisResults">
+                        Your analysis results will appear here...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Writing Logs Tab -->
+            <div class="tab-content" id="writingLogs">
+                <h2 class="glass-card" style="padding: 1rem; margin-bottom: 1.5rem;">
+                    <i class="fas fa-clock"></i> Your Writing History
+                </h2>
+                <div class="writing-logs" id="writingLogsList">
+                    <!-- Writing logs will be added here dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        // DOM Elements
+        const modeSelection = document.getElementById('modeSelection');
+        const readerDashboard = document.getElementById('readerDashboard');
+        const writerDashboard = document.getElementById('writerDashboard');
+        const readerBtn = document.getElementById('readerBtn');
+        const writerBtn = document.getElementById('writerBtn');
+        const backToModeReader = document.getElementById('backToModeReader');
+        const backToModeWriter = document.getElementById('backToModeWriter');
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Tab functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Book management
+        const addBookForm = document.getElementById('addBookForm');
+        const bookList = document.getElementById('bookList');
+        
+        // Prompt generator
+        const generatePromptBtn = document.getElementById('generatePromptBtn');
+        const generatedPrompt = document.getElementById('generatedPrompt');
+        
+        // Writing analysis
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const analysisResults = document.getElementById('analysisResults');
+        
+        // Background elements animation
+        const bgElements = document.querySelector('.bg-elements');
+        
+        // Create additional floating elements
+        for (let i = 0; i < 5; i++) {
+            const element = document.createElement('div');
+            element.style.width = `${Math.random() * 100 + 50}px`;
+            element.style.height = element.style.width;
+            element.style.top = `${Math.random() * 100}%`;
+            element.style.left = `${Math.random() * 100}%`;
+            element.style.animationDelay = `${Math.random() * 10}s`;
+            element.style.animationDuration = `${Math.random() * 20 + 10}s`;
+            bgElements.appendChild(element);
+        }
+        
+        // Event Listeners
+        readerBtn.addEventListener('click', () => {
+            modeSelection.style.display = 'none';
+            readerDashboard.style.display = 'block';
+        });
+        
+        writerBtn.addEventListener('click', () => {
+            modeSelection.style.display = 'none';
+            writerDashboard.style.display = 'block';
+        });
+        
+        backToModeReader.addEventListener('click', () => {
+            readerDashboard.style.display = 'none';
+            modeSelection.style.display = 'flex';
+        });
+        
+        backToModeWriter.addEventListener('click', () => {
+            writerDashboard.style.display = 'none';
+            modeSelection.style.display = 'flex';
+        });
+        
+        // Tab switching
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and contents
+                tabBtns.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                btn.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Sample book data (would be replaced with actual data storage)
+        const sampleBooks = [
+            {
+                title: "The Hobbit",
+                author: "J.R.R. Tolkien",
+                cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                rating: 5,
+                description: "A fantasy novel about Bilbo Baggins and his adventure.",
+                annotation: "Not all those who wander are lost."
+            },
+            {
+                title: "To Kill a Mockingbird",
+                author: "Harper Lee",
+                cover: "https://images.unsplash.com/photo-1551009172-28f5095a4a1a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                rating: 4,
+                description: "A story of racial injustice and moral growth.",
+                annotation: "The one place where a man ought to get a square deal is in a courtroom."
+            },
+            {
+                title: "1984",
+                author: "George Orwell",
+                cover: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                rating: 5,
+                description: "A dystopian social science fiction novel.",
+                annotation: "War is peace. Freedom is slavery. Ignorance is strength."
+            },
+            {
+                title: "Pride and Prejudice",
+                author: "Jane Austen",
+                cover: "https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                rating: 4,
+                description: "A romantic novel of manners.",
+                annotation: "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife."
+            }
+        ];
+        
+        // Display sample books
+        function displayBooks() {
+            bookList.innerHTML = '';
+            sampleBooks.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card glass-card';
+                bookCard.innerHTML = `
+                    <img src="${book.cover}" alt="${book.title}" class="book-cover">
+                    <div class="book-details">
+                        <h3 class="book-title">${book.title}</h3>
+                        <p class="book-author">${book.author}</p>
+                        <p class="book-rating">${'★'.repeat(book.rating)}${'☆'.repeat(5 - book.rating)}</p>
+                    </div>
+                `;
+                bookList.appendChild(bookCard);
+            });
+        }
+        
+        // Add book form submission
+        addBookForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('bookTitle').value;
+            const author = document.getElementById('bookAuthor').value;
+            const description = document.getElementById('bookDescription').value;
+            const rating = document.getElementById('bookRating').value;
+            const annotation = document.getElementById('favAnnotation').value;
+            
+            // In a real app, you would handle the file upload properly
+            const coverInput = document.getElementById('bookCover');
+            const cover = coverInput.files.length > 0 
+                ? URL.createObjectURL(coverInput.files[0]) 
+                : 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80';
+            
+            // Add to sample books (in real app, add to database)
+            sampleBooks.push({
+                title,
+                author,
+                cover,
+                rating,
+                description,
+                annotation
+            });
+            
+            // Refresh book display
+            displayBooks();
+            
+            // Reset form
+            addBookForm.reset();
+            
+            // Update stats
+            document.getElementById('totalBooks').textContent = sampleBooks.length;
+            const avgRating = (sampleBooks.reduce((sum, book) => sum + parseInt(book.rating), 0) / sampleBooks.length).toFixed(1);
+            document.getElementById('avgRating').textContent = avgRating;
+        });
+        
+        // Generate prompt
+        generatePromptBtn.addEventListener('click', () => {
+            const genre = document.getElementById('genreSelect').value;
+            const keywords = document.getElementById('keywordsInput').value;
+            
+            // Sample prompts (in real app, this would call an AI API)
+            const prompts = {
+                fantasy: [
+                    `Write about a ${keywords || 'mysterious'} artifact that holds the key to saving the kingdom.`,
+                    `Create a scene where a young ${keywords || 'peasant'} discovers they have magical powers.`,
+                    `Describe a confrontation between ${keywords || 'rival'} factions in a magical realm.`
+                ],
+                'sci-fi': [
+                    `A ${keywords || 'rogue'} AI has taken control of a spaceship. Write the crew's response.`,
+                    `Describe humanity's first contact with ${keywords || 'alien'} life forms.`,
+                    `In a future where ${keywords || 'memory'} can be bought and sold, someone discovers a forbidden memory.`
+                ],
+                mystery: [
+                    `A detective is called to investigate a ${keywords || 'locked room'} murder with no apparent suspects.`,
+                    `Write about a character who stumbles upon a ${keywords || 'cryptic'} message that leads to an unsolved crime.`,
+                    `In a small town, ${keywords || 'strange disappearances'} begin occurring with a peculiar pattern.`
+                ],
+                romance: [
+                    `Two rivals in ${keywords || 'business'} find themselves falling for each other despite their differences.`,
+                    `After a chance encounter at a ${keywords || 'coffee shop'}, two strangers can't stop thinking about each other.`,
+                    `Write about a love letter that was ${keywords || 'never delivered'} until years later.`
+                ],
+                horror: [
+                    `A character realizes their ${keywords || 'new home'} is haunted by a malevolent entity.`,
+                    `Write about a terrifying encounter in a ${keywords || 'forest'} that defies explanation.`,
+                    `An ancient ${keywords || 'curse'} starts manifesting in modern times with deadly consequences.`
+                ],
+                historical: [
+                    `During ${keywords || 'World War II'}, an unlikely friendship forms across enemy lines.`,
+                    `Write about a character who witnesses a pivotal ${keywords || 'historical event'} from an unusual perspective.`,
+                    `A forgotten ${keywords || 'artifact'} reveals a secret that could change our understanding of history.`
+                ],
+                contemporary: [
+                    `A character's life changes when they decide to ${keywords || 'quit their job'} and pursue their passion.`,
+                    `Write about the complexity of ${keywords || 'modern relationships'} in the age of social media.`,
+                    `A ${keywords || 'chance encounter'} leads to an unexpected adventure in the city.`
+                ]
+            };
+            
+            // Get random prompt for selected genre
+            const genrePrompts = prompts[genre];
+            const randomPrompt = genrePrompts[Math.floor(Math.random() * genrePrompts.length)];
+            
+            // Display the prompt with animation
+            generatedPrompt.style.opacity = 0;
+            setTimeout(() => {
+                generatedPrompt.textContent = randomPrompt;
+                generatedPrompt.style.opacity = 1;
+            }, 300);
+        });
+        
+        // Writing analysis
+        analyzeBtn.addEventListener('click', () => {
+            const writingContent = document.getElementById('writingInput').value;
+            
+            // Simple analysis (in a real app, would be more sophisticated)
+            if (!writingContent) {
+                analysisResults.innerHTML = 'Please enter some text to analyze.';
+                return;
+            }
+            
+            const wordCount = writingContent.trim().split(/\s+/).length;
+            const sentenceCount = writingContent.split(/[.!?]+/).length - 1;
+            const avgSentenceLength = Math.round(wordCount / sentenceCount);
+            
+            // Count occurrences of common filler words
+            const fillerWords = ['very', 'really', 'just', 'so', 'that', 'then', 'actually', 'basically'];
+            let fillerCount = 0;
+            fillerWords.forEach(word => {
+                const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                const matches = writingContent.match(regex);
+                if (matches) fillerCount += matches.length;
+            });
+            
+            // Calculate readability score (simplified Flesch reading ease)
+            const readability = 100 - (avgSentenceLength * 1.015) - Math.min(fillerCount * 2, 20);
+            
+            // Create analysis HTML
+            analysisResults.innerHTML = `
+                <h3>Analysis Results:</h3>
+                <p><strong>Word Count:</strong> ${wordCount}</p>
+                <p><strong>Sentence Count:</strong> ${sentenceCount}</p>
+                <p><strong>Average Sentence Length:</strong> ${avgSentenceLength} words</p>
+                <p><strong>Filler Words Used:</strong> ${fillerCount}</p>
+                <p><strong>Readability Score:</strong> ${readability.toFixed(1)}/100</p>
+                <h4>Suggestions:</h4>
+                <ul>
+                    ${avgSentenceLength > 20 ? '<li>Consider using shorter sentences for better readability.</li>' : ''}
+                    ${fillerCount > 5 ? '<li>Try reducing the number of filler words for more impactful writing.</li>' : ''}
+                    ${wordCount < 100 ? '<li>Your piece is quite short. Consider expanding your ideas for more depth.</li>' : ''}
+                </ul>
+            `;
+        });
+        
+        // Sample writing logs
+        const writingLogs = [
+            {
+                date: 'April 3, 2023',
+                content: 'Worked on my fantasy novel chapter 3. Wrote 1,200 words.',
+                prompt: 'A character discovers a hidden power within themselves.'
+            },
+            {
+                date: 'April 1, 2023',
+                content: 'Started a new short story. Wrote 800 words.',
+                prompt: 'Two strangers connected by a mysterious object.'
+            },
+            {
+                date: 'March 29, 2023',
+                content: 'Edited my submission for the writing contest. Cut 300 words.',
+                prompt: 'N/A (Editing session)'
+            }
+        ];
+        
+        // Display writing logs
+        function displayWritingLogs() {
+            const writingLogsList = document.getElementById('writingLogsList');
+            writingLogsList.innerHTML = '';
+            
+            writingLogs.forEach(log => {
+                const logItem = document.createElement('div');
+                logItem.className = 'log-item glass-card';
+                logItem.innerHTML = `
+                    <p class="log-date"><i class="fas fa-calendar"></i> ${log.date}</p>
+                    <p class="log-content">${log.content}</p>
+                    ${log.prompt !== 'N/A (Editing session)' ? `<p class="log-prompt"><i class="fas fa-quote-left"></i> Prompt: ${log.prompt}</p>` : ''}
+                `;
+                writingLogsList.appendChild(logItem);
+            });
+        }
+        
+        // Theme toggle functionality
+        let darkMode = true; // Start with dark mode (current theme)
+        themeToggle.addEventListener('click', () => {
+            const root = document.documentElement;
+            if (darkMode) {
+                // Switch to light mode
+                document.body.style.background = "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)";
+                document.body.style.color = "#2c3e50";
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                
+                // Update glass card styles
+                const glassCards = document.querySelectorAll('.glass-card');
+                glassCards.forEach(card => {
+                    card.style.background = "rgba(255, 255, 255, 0.5)";
+                    card.style.color = "#2c3e50";
+                });
+                
+                // Update form controls
+                const formControls = document.querySelectorAll('.form-control');
+                formControls.forEach(control => {
+                    control.style.background = "rgba(255, 255, 255, 0.5)";
+                    control.style.color = "#2c3e50";
+                });
+                
+                darkMode = false;
+            } else {
+                // Switch to dark mode
+                document.body.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+                document.body.style.color = "#ecf0f1";
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                
+                // Update glass card styles
+                const glassCards = document.querySelectorAll('.glass-card');
+                glassCards.forEach(card => {
+                    card.style.background = "rgba(255, 255, 255, 0.2)";
+                    card.style.color = "white";
+                });
+                
+                // Update form controls
+                const formControls = document.querySelectorAll('.form-control');
+                formControls.forEach(control => {
+                    control.style.background = "rgba(255, 255, 255, 0.1)";
+                    control.style.color = "white";
+                });
+                
+                darkMode = true;
+            }
+        });
+        
+        // Initialize the app
+        window.onload = function() {
+            displayBooks();
+            displayWritingLogs();
+            
+            // Set default prompt
+            generatedPrompt.textContent = "Click 'Generate Prompt' to get writing inspiration...";
+            
+            // Initialize quote of the day (would be dynamic in a real app)
+            const quotes = [
+                { text: "The more that you read, the more things you will know. The more that you learn, the more places you'll go.", author: "Dr. Seuss" },
+                { text: "A reader lives a thousand lives before he dies. The man who never reads lives only one.", author: "George R.R. Martin" },
+                { text: "You can always edit a bad page. You can't edit a blank page.", author: "Jodi Picoult" }
+            ];
+            
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('dailyQuote').textContent = `"${randomQuote.text}"`;
+            document.querySelector('.quote-author').textContent = `— ${randomQuote.author}`;
+        };
+    </script>
+    <!-- Backend Overrides - Add this line without changing anything else -->
+     <script src="backend-overrides.js"></script>
+</body>
+</html>
